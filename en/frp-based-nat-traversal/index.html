@@ -1,0 +1,359 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>A Frp-Based NAT Traversal Setup | LLLLLUO!!!!!</title><meta name="author" content="Leukoiris"><meta name="copyright" content="Leukoiris"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="A simple way to expose a local game server through a public relay with frp.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="A Frp-Based NAT Traversal Setup">
+<meta property="og:url" content="https://blog.llllluotj.ink/en/frp-based-nat-traversal/index.html">
+<meta property="og:site_name" content="LLLLLUO!!!!!">
+<meta property="og:description" content="A simple way to expose a local game server through a public relay with frp.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog.llllluotj.ink/img/%E5%A4%9C%E5%88%80%EF%BC%81%EF%BC%81%EF%BC%81%EF%BC%81%EF%BC%81_1.png">
+<meta property="article:published_time" content="2025-01-03T10:08:44.000Z">
+<meta property="article:modified_time" content="2026-04-19T13:09:07.215Z">
+<meta property="article:author" content="Leukoiris">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.llllluotj.ink/img/%E5%A4%9C%E5%88%80%EF%BC%81%EF%BC%81%EF%BC%81%EF%BC%81%EF%BC%81_1.png"><link rel="shortcut icon" href="/img/%E5%A4%9C%E5%88%80%EF%BC%81%EF%BC%81%EF%BC%81%EF%BC%81%EF%BC%81.png"><link rel="canonical" href="https://blog.llllluotj.ink/en/frp-based-nat-traversal/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><link rel="preconnect" href="//static.cloudflareinsights.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-YPHMHWSSG7"></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-YPHMHWSSG7');
+</script><script defer="defer" data-pjax="data-pjax" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{&quot;token&quot;: &quot;fbc70c1826574cb38f3e6360f626d670&quot;}"></script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Error',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'A Frp-Based NAT Traversal Setup',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2026-04-19 21:09:07'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><link rel="stylesheet" href="//at.alicdn.com/t/c/font_4343415_0wpj1ls292v.css"><link rel="stylesheet" href="/css/lang-switch.css"><link rel="stylesheet" href="/css/comment-overrides.css"><meta name="generator" content="Hexo 7.0.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/%E5%A4%9C%E5%88%80%EF%BC%81%EF%BC%81%EF%BC%81%EF%BC%81%EF%BC%81_1.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/en/archives/"><div class="headline">Articles</div><div class="length-num">15</div></a><a href="/en/tags/"><div class="headline">Tags</div><div class="length-num">13</div></a><a href="/en/categories/"><div class="headline">Categories</div><div class="length-num">5</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/en/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/en/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/en/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/en/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/artitalk/"><i class="fa-fw icon icon-icon_shuoshuo"></i><span> Moments</span></a></div><div class="menus_item"><a class="site-page" href="/2025/01/03/%E5%9F%BA%E4%BA%8EFrp%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F%E6%96%B9%E6%A1%88/"><i class="fa-fw fas fa-language"></i><span> 中文</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/Untitled_Artwork%204.png')"><nav id="nav"><span id="blog-info"><a href="/en/" title="LLLLLUO!!!!!"><img class="site-icon" src="/img/%E5%A4%9C%E5%88%80%EF%BC%81%EF%BC%81%EF%BC%81%EF%BC%81%EF%BC%81.png"/><span class="site-name">LLLLLUO!!!!!</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/en/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/en/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/en/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/en/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/artitalk/"><i class="fa-fw icon icon-icon_shuoshuo"></i><span> Moments</span></a></div><div class="menus_item"><a class="site-page" href="/2025/01/03/%E5%9F%BA%E4%BA%8EFrp%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F%E6%96%B9%E6%A1%88/"><i class="fa-fw fas fa-language"></i><span> 中文</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">A Frp-Based NAT Traversal Setup</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2025-01-03T10:08:44.000Z" title="Created 2025-01-03 18:08:44">2025-01-03</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-04-19T13:09:07.215Z" title="Updated 2026-04-19 21:09:07">2026-04-19</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="A Frp-Based NAT Traversal Setup"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout hide-aside" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="Introduction">Introduction</h2>
+<p>Recently I wanted to play <em>Palworld</em> with classmates, but that meant one person’s computer had to keep the world online the whole time. In other words, one specific person had to stay online or nobody else could play. That was annoying. My own computer crashes all the time too.</p>
+<p>By coincidence, though, I happen to have a pretty capable little machine at home and also a server with a public IP. The public server is not powerful enough to host the game server by itself, and neither my home network nor the campus network gives me a public IP directly, so the obvious answer is to use the public server as a relay.</p>
+<p>So the required hardware for this setup is just:</p>
+<ul>
+<li>one local machine that can host the actual service</li>
+<li>one machine with a public IP that can act as the relay</li>
+</ul>
+<h2 id="Basic-idea">Basic idea</h2>
+<p>The idea is simple. The local client, <code>frpc</code>, establishes a TCP connection with the server-side <code>frps</code> on a specific port of the public machine. The local side only needs the public server’s IP address and port. Once connected, <code>frps</code> waits on the relay port you expose, and traffic coming into that public port is forwarded to the local port configured in <code>frpc</code>.</p>
+<p>For example, if the game server listens on port <code>8211</code> locally and I expose port <code>6000</code> on the public server, then traffic sent to port <code>6000</code> on the public machine will be forwarded directly to port <code>8211</code> on the local host.</p>
+<h2 id="Configuration">Configuration</h2>
+<p>Download frp first. You can get it directly from the official site: <code>https://gofrp.org/zh-cn/docs/overview/</code></p>
+<p>Upload <code>frps</code> to your public server and <code>frpc</code> to the machine that will host the local service.</p>
+<h3 id="Frps">Frps</h3>
+<p>Create a <code>.toml</code> file. The simplest version looks like this:</p>
+<figure class="highlight toml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">bindPort</span> = <span class="number">7000</span></span><br></pre></td></tr></table></figure>
+<p>Then start it:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./frps -c ./frps.toml</span><br></pre></td></tr></table></figure>
+<h3 id="Frpc">Frpc</h3>
+<p>Create another <code>.toml</code> file on the local machine:</p>
+<figure class="highlight toml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">serverAddr</span> = <span class="string">&quot;8.130.18.93&quot;</span></span><br><span class="line"><span class="attr">serverPort</span> = <span class="number">7000</span></span><br><span class="line"><span class="attr">loginFailExit</span> = <span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="section">[transport]</span></span><br><span class="line"><span class="attr">dialServerTimeout</span> = <span class="number">2</span></span><br><span class="line"></span><br><span class="line"><span class="section">[[proxies]]</span></span><br><span class="line"><span class="attr">name</span> = <span class="string">&quot;ssh&quot;</span></span><br><span class="line"><span class="attr">type</span> = <span class="string">&quot;udp&quot;</span></span><br><span class="line"><span class="attr">localIP</span> = <span class="string">&quot;127.0.0.1&quot;</span></span><br><span class="line"><span class="attr">localPort</span> = <span class="number">8211</span></span><br><span class="line"><span class="attr">remotePort</span> = <span class="number">6000</span></span><br></pre></td></tr></table></figure>
+<p>A few practical notes:</p>
+<ul>
+<li>The latency between you and the public server matters. Ping it first. Mine was pretty fast, so I set the timeout to two seconds.</li>
+<li>It is better to set <code>loginFailExit = false</code>. My packet loss is annoyingly high, especially on campus networks, so letting it keep retrying is much safer.</li>
+<li>Make sure you are using the correct protocol for the service you are exposing. Do not spend half a day debugging only to realize the protocol was wrong.</li>
+</ul>
+<p>Then start it:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./frpc -c ./frpc.toml</span><br></pre></td></tr></table></figure>
+<p>Wait a bit. Once it connects, the job is done.</p>
+<h2 id="Afterword">Afterword</h2>
+<p>It is honestly very simple, which makes me wonder why I even wrote this. Probably because I did not want to study.</p>
+<p>For application-specific details, such as which protocol your service needs, go read both the frp documentation and your application’s own docs.</p>
+<p>Also, yes, <em>Palworld</em> is fun. My server is probably still running all the time. If anyone actually wants to play, come ask me for the address, though I doubt anyone is reading this blog.</p>
+<p>Does anyone want to play <em>Terraria</em>? Does anyone even read the things I write here? Ha. Whatever. I am just writing for fun. I neglected the comment section for too long and it died.</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://blog.llllluotj.ink">Leukoiris</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://blog.llllluotj.ink/en/frp-based-nat-traversal/">https://blog.llllluotj.ink/en/frp-based-nat-traversal/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="/img/%E5%A4%9C%E5%88%80%EF%BC%81%EF%BC%81%EF%BC%81%EF%BC%81%EF%BC%81_1.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comment</span></div><div class="comment-switch"><span class="first-comment">Giscus</span><span id="switch-btn"></span><span class="second-comment">Artalk</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div><div><div id="artalk-wrap"></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2026 By Leukoiris</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><a id="to_comment" href="#post-comment" title="Scroll To Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js"></script><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', { class: 'katex-wrap'})
+  })
+})()</script><script>(()=>{
+  const getGiscusTheme = theme => {
+    return theme === 'dark' ? 'dark' : 'light'
+  }
+
+  const loadGiscus = () => {
+    const config = Object.assign({
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'LLLLLUOTJ/blog_comment',
+      'data-repo-id': 'R_kgDOK6YpcA',
+      'data-category-id': 'DIC_kwDOK6YpcM4CbyXt',
+      'data-mapping': 'pathname',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true
+    },null)
+
+    const ele = document.createElement('script')
+    for (let key in config) {
+      ele.setAttribute(key, config[key])
+    }
+    document.getElementById('giscus-wrap').appendChild(ele)
+  }
+
+  const changeGiscusTheme = theme => {
+    const sendMessage = message => {
+      const iframe = document.querySelector('iframe.giscus-frame')
+      if (!iframe) return
+      iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app')
+    }
+
+    sendMessage({
+      setConfig: {
+        theme: getGiscusTheme(theme)
+      }
+    });
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if ('Giscus' === 'Giscus' || !true) {
+    if (true) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment= loadGiscus
+  }
+})()</script><script>(() => {
+  const initArtalk = () => {
+    window.artalkItem = new Artalk(Object.assign({
+      el: '#artalk-wrap',
+      server: 'https://artalk.llllluotj.ink',
+      site: 'Default Site',
+      pageKey: location.pathname,
+      darkMode: document.documentElement.getAttribute('data-theme') === 'dark',
+      countEl: '.artalk-count'
+    },null))
+
+    if (GLOBAL_CONFIG.lightbox === 'null') return
+    window.artalkItem.use(ctx => {
+      ctx.on('list-loaded', () => {
+        ctx.getCommentList().forEach(comment => {
+          const $content = comment.getRender().$content
+          btf.loadLightbox($content.querySelectorAll('img:not([atk-emoticon])'))
+        })
+      })
+    })
+  }
+
+  const loadArtalk = async () => {
+    if (typeof window.artalkItem === 'object') initArtalk()
+    else {
+      await getCSS('https://cdn.staticfile.org/artalk/2.7.3/Artalk.css')
+      await getScript('https://cdn.staticfile.org/artalk/2.7.3/Artalk.js')
+      initArtalk()
+    }
+  }
+
+  const artalkChangeMode = theme => {
+    const artalkWrap = document.getElementById('artalk-wrap')
+    if (!(artalkWrap && artalkWrap.children.length)) return
+    const isDark = theme === 'dark'
+    window.artalkItem.setDarkMode(isDark)
+  }
+
+
+  btf.addGlobalFn('themeChange', artalkChangeMode, 'artalk')
+  
+  if ('Giscus' === 'Artalk' || !true) {
+    if (true) btf.loadComment(document.getElementById('artalk-wrap'), loadArtalk)
+    else loadArtalk()
+  } else {
+    window.loadOtherComment = loadArtalk
+  }
+})()</script></div><script src="//at.alicdn.com/t/c/font_4343415_0wpj1ls292v.js"></script><div class="aplayer no-destroy" data-id="9104363479" data-server="netease" data-type="playlist" data-fixed="true" data-autoplay="false" data-mini="true" data-lrctype="0"> </div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/metingjs/dist/Meting.min.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["link[rel=\"canonical\"]","meta[property=\"og:image\"]","meta[property=\"og:title\"]","meta[property=\"og:url\"]","head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: true,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener
+  btf.removeGlobalFnEvent('pjax')
+  btf.removeGlobalFnEvent('themeChange')
+
+  document.getElementById('rightside').classList.remove('rightside-show')
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', 'G-YPHMHWSSG7', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', e => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

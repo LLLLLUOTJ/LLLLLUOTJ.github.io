@@ -1,0 +1,409 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Bomb Lab Notes | LLLLLUO!!!!!</title><meta name="author" content="Leukoiris"><meta name="copyright" content="Leukoiris"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="A cleaned-up set of notes for the CSAPP Bomb Lab, phase by phase, using objdump and gdb.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Bomb Lab Notes">
+<meta property="og:url" content="https://blog.llllluotj.ink/en/bomb-lab-notes/index.html">
+<meta property="og:site_name" content="LLLLLUO!!!!!">
+<meta property="og:description" content="A cleaned-up set of notes for the CSAPP Bomb Lab, phase by phase, using objdump and gdb.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog.llllluotj.ink/img/%E5%A4%9C%E5%88%80%EF%BC%81%EF%BC%81%EF%BC%81%EF%BC%81%EF%BC%81_1.png">
+<meta property="article:published_time" content="2024-08-09T09:33:31.000Z">
+<meta property="article:modified_time" content="2026-04-19T13:25:16.123Z">
+<meta property="article:author" content="Leukoiris">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.llllluotj.ink/img/%E5%A4%9C%E5%88%80%EF%BC%81%EF%BC%81%EF%BC%81%EF%BC%81%EF%BC%81_1.png"><link rel="shortcut icon" href="/img/%E5%A4%9C%E5%88%80%EF%BC%81%EF%BC%81%EF%BC%81%EF%BC%81%EF%BC%81.png"><link rel="canonical" href="https://blog.llllluotj.ink/en/bomb-lab-notes/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><link rel="preconnect" href="//static.cloudflareinsights.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-YPHMHWSSG7"></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-YPHMHWSSG7');
+</script><script defer="defer" data-pjax="data-pjax" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{&quot;token&quot;: &quot;fbc70c1826574cb38f3e6360f626d670&quot;}"></script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Error',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Bomb Lab Notes',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2026-04-19 21:25:16'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><link rel="stylesheet" href="//at.alicdn.com/t/c/font_4343415_0wpj1ls292v.css"><link rel="stylesheet" href="/css/lang-switch.css"><link rel="stylesheet" href="/css/comment-overrides.css"><meta name="generator" content="Hexo 7.0.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/%E5%A4%9C%E5%88%80%EF%BC%81%EF%BC%81%EF%BC%81%EF%BC%81%EF%BC%81_1.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/en/archives/"><div class="headline">Articles</div><div class="length-num">15</div></a><a href="/en/tags/"><div class="headline">Tags</div><div class="length-num">13</div></a><a href="/en/categories/"><div class="headline">Categories</div><div class="length-num">5</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/en/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/en/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/en/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/en/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/artitalk/"><i class="fa-fw icon icon-icon_shuoshuo"></i><span> Moments</span></a></div><div class="menus_item"><a class="site-page" href="/2024/08/09/labs-bomb/"><i class="fa-fw fas fa-language"></i><span> 中文</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/Untitled_Artwork%204.png')"><nav id="nav"><span id="blog-info"><a href="/en/" title="LLLLLUO!!!!!"><img class="site-icon" src="/img/%E5%A4%9C%E5%88%80%EF%BC%81%EF%BC%81%EF%BC%81%EF%BC%81%EF%BC%81.png"/><span class="site-name">LLLLLUO!!!!!</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/en/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/en/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/en/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/en/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/artitalk/"><i class="fa-fw icon icon-icon_shuoshuo"></i><span> Moments</span></a></div><div class="menus_item"><a class="site-page" href="/2024/08/09/labs-bomb/"><i class="fa-fw fas fa-language"></i><span> 中文</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Bomb Lab Notes</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2024-08-09T09:33:31.000Z" title="Created 2024-08-09 17:33:31">2024-08-09</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-04-19T13:25:16.123Z" title="Updated 2026-04-19 21:25:16">2026-04-19</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Bomb Lab Notes"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout hide-aside" id="content-inner"><div id="post"><article class="post-content" id="article-container"><ul>
+<li>This lab does not feel especially friendly at the beginning, so I started by getting comfortable with <code>gdb</code>.</li>
+<li>These are just my own notes and solutions. Solving it once by yourself really does deepen your understanding.</li>
+<li>Start with the first phase if you want to see how the process begins.</li>
+<li>Good luck.</li>
+</ul>
+<h1>Bomb Lab Notes</h1>
+<p>First, disassemble the <code>bomb</code> binary:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">objdump -d bomb &gt; bomb.asm</span><br></pre></td></tr></table></figure>
+<p>Then you can search inside <code>bomb.asm</code> for things like <code>&lt;phase_1&gt;</code>, <code>&lt;phase_2&gt;</code>, and so on.</p>
+<p>After that, open the binary with <code>gdb</code>:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gdb bomb</span><br></pre></td></tr></table></figure>
+<h2 id="Phase-1">Phase 1</h2>
+<p>The first phase is the easiest one to read. The function loads a string address into a register, calls a helper that compares two strings, and explodes if the return value is not zero.</p>
+<p>So the most direct way to solve it is to break near the comparison call and inspect the registers:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(gdb) b *0x400ee9</span><br></pre></td></tr></table></figure>
+<p>Then run the bomb and type anything for the first input:</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Welcome to my fiendish little bomb. You have 6 phases with</span><br><span class="line">which to blow yourself up. Have a nice day!</span><br><span class="line"></span><br><span class="line">llllluo</span><br><span class="line"></span><br><span class="line">Breakpoint 1, 0x0000000000400ee9 in phase_1 ()</span><br></pre></td></tr></table></figure>
+<p>Now inspect the string argument:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(gdb) x/s $rsi</span><br><span class="line">0x402400: &quot;Border relations with Canada have never been better.&quot;</span><br></pre></td></tr></table></figure>
+<p>That is the answer to phase 1.</p>
+<p>You can also check your own input:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(gdb) x/s $rdi</span><br><span class="line">0x603780 &lt;input_strings&gt;: &quot;llllluo&quot;</span><br></pre></td></tr></table></figure>
+<h2 id="Phase-2">Phase 2</h2>
+<p>This phase calls <code>read_six_numbers</code>, so the first obvious guess is that it expects six integers.</p>
+<p>Reading the assembly shows:</p>
+<ul>
+<li>the first number must be <code>1</code></li>
+<li>each following number must be double the previous one</li>
+</ul>
+<p>So the required sequence is:</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1 2 4 8 16 32</span><br></pre></td></tr></table></figure>
+<p>And the bomb responds with:</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">That&#x27;s number 2.  Keep going!</span><br></pre></td></tr></table></figure>
+<h2 id="Phase-3">Phase 3</h2>
+<p>This phase uses <code>sscanf</code> with a format that reads two integers. The first number is checked to make sure it is at most <code>7</code>, and then the code jumps through a small jump table. Each case loads a different constant into <code>%eax</code>, and the second input must match that constant.</p>
+<p>So the structure is:</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">index value</span><br></pre></td></tr></table></figure>
+<p>One valid answer is:</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0 207</span><br></pre></td></tr></table></figure>
+<p>That is enough to pass phase 3.</p>
+<h2 id="Phase-4">Phase 4</h2>
+<p>This phase also reads two integers, and then calls a recursive helper <code>func4</code>.</p>
+<p>From the assembly, you can see:</p>
+<ul>
+<li>the first input must be at most <code>14</code></li>
+<li>the return value of <code>func4(first, 0, 14)</code> must be <code>0</code></li>
+<li>the second input must also be <code>0</code></li>
+</ul>
+<p>The midpoint logic inside <code>func4</code> reveals that the only valid first input is <code>7</code>, so the answer is:</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">7 0</span><br></pre></td></tr></table></figure>
+<p>The bomb replies:</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">So you got that one.  Try this one.</span><br></pre></td></tr></table></figure>
+<h2 id="Phase-5">Phase 5</h2>
+<p>This one expects a string of length <code>6</code>.</p>
+<p>The core loop takes each input character, keeps only its low four bits with <code>andl $0x0f</code>, and uses that value as an index into a 16-character lookup table:</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">maduiersnfotvbyl</span><br></pre></td></tr></table></figure>
+<p>The transformed result must become:</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flyers</span><br></pre></td></tr></table></figure>
+<p>So what matters is choosing six characters whose low four bits map to:</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">9 15 14 5 6 7</span><br></pre></td></tr></table></figure>
+<p>One working example is:</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">9?.567</span><br></pre></td></tr></table></figure>
+<p>After that, the bomb says:</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Good work!  On to the next...</span><br></pre></td></tr></table></figure>
+<h2 id="Phase-6">Phase 6</h2>
+<p>This is the most annoying normal phase.</p>
+<p>It starts by reading six integers, then checks:</p>
+<ul>
+<li>each number must be between <code>1</code> and <code>6</code></li>
+<li>no two numbers can be the same</li>
+</ul>
+<p>After that, it transforms each input <code>x</code> into <code>7 - x</code>. Then it uses those transformed positions to walk through a linked list stored in memory and rebuild a new list in that order.</p>
+<p>The list in memory looks like this:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(gdb) x/24qd 0x6032d0</span><br><span class="line">0x6032d0 &lt;node1&gt;:       332     1       6304480 0</span><br><span class="line">0x6032e0 &lt;node2&gt;:       168     2       6304496 0</span><br><span class="line">0x6032f0 &lt;node3&gt;:       924     3       6304512 0</span><br><span class="line">0x603300 &lt;node4&gt;:       691     4       6304528 0</span><br><span class="line">0x603310 &lt;node5&gt;:       477     5       6304544 0</span><br><span class="line">0x603320 &lt;node6&gt;:       443     6       0       0</span><br></pre></td></tr></table></figure>
+<p>The reordered list must be in descending order by node value:</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">924, 691, 477, 443, 332, 168</span><br></pre></td></tr></table></figure>
+<p>That corresponds to node indices:</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">3 4 5 6 1 2</span><br></pre></td></tr></table></figure>
+<p>But remember that the program internally uses <code>7 - x</code>, so the actual input must be:</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">4 3 2 1 6 5</span><br></pre></td></tr></table></figure>
+<p>And then you get:</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Congratulations! You&#x27;ve defused the bomb!</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Done.</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://blog.llllluotj.ink">Leukoiris</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://blog.llllluotj.ink/en/bomb-lab-notes/">https://blog.llllluotj.ink/en/bomb-lab-notes/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="/img/%E5%A4%9C%E5%88%80%EF%BC%81%EF%BC%81%EF%BC%81%EF%BC%81%EF%BC%81_1.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comment</span></div><div class="comment-switch"><span class="first-comment">Giscus</span><span id="switch-btn"></span><span class="second-comment">Artalk</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div><div><div id="artalk-wrap"></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2026 By Leukoiris</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><a id="to_comment" href="#post-comment" title="Scroll To Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js"></script><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', { class: 'katex-wrap'})
+  })
+})()</script><script>(()=>{
+  const getGiscusTheme = theme => {
+    return theme === 'dark' ? 'dark' : 'light'
+  }
+
+  const loadGiscus = () => {
+    const config = Object.assign({
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'LLLLLUOTJ/blog_comment',
+      'data-repo-id': 'R_kgDOK6YpcA',
+      'data-category-id': 'DIC_kwDOK6YpcM4CbyXt',
+      'data-mapping': 'pathname',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true
+    },null)
+
+    const ele = document.createElement('script')
+    for (let key in config) {
+      ele.setAttribute(key, config[key])
+    }
+    document.getElementById('giscus-wrap').appendChild(ele)
+  }
+
+  const changeGiscusTheme = theme => {
+    const sendMessage = message => {
+      const iframe = document.querySelector('iframe.giscus-frame')
+      if (!iframe) return
+      iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app')
+    }
+
+    sendMessage({
+      setConfig: {
+        theme: getGiscusTheme(theme)
+      }
+    });
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if ('Giscus' === 'Giscus' || !true) {
+    if (true) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment= loadGiscus
+  }
+})()</script><script>(() => {
+  const initArtalk = () => {
+    window.artalkItem = new Artalk(Object.assign({
+      el: '#artalk-wrap',
+      server: 'https://artalk.llllluotj.ink',
+      site: 'Default Site',
+      pageKey: location.pathname,
+      darkMode: document.documentElement.getAttribute('data-theme') === 'dark',
+      countEl: '.artalk-count'
+    },null))
+
+    if (GLOBAL_CONFIG.lightbox === 'null') return
+    window.artalkItem.use(ctx => {
+      ctx.on('list-loaded', () => {
+        ctx.getCommentList().forEach(comment => {
+          const $content = comment.getRender().$content
+          btf.loadLightbox($content.querySelectorAll('img:not([atk-emoticon])'))
+        })
+      })
+    })
+  }
+
+  const loadArtalk = async () => {
+    if (typeof window.artalkItem === 'object') initArtalk()
+    else {
+      await getCSS('https://cdn.staticfile.org/artalk/2.7.3/Artalk.css')
+      await getScript('https://cdn.staticfile.org/artalk/2.7.3/Artalk.js')
+      initArtalk()
+    }
+  }
+
+  const artalkChangeMode = theme => {
+    const artalkWrap = document.getElementById('artalk-wrap')
+    if (!(artalkWrap && artalkWrap.children.length)) return
+    const isDark = theme === 'dark'
+    window.artalkItem.setDarkMode(isDark)
+  }
+
+
+  btf.addGlobalFn('themeChange', artalkChangeMode, 'artalk')
+  
+  if ('Giscus' === 'Artalk' || !true) {
+    if (true) btf.loadComment(document.getElementById('artalk-wrap'), loadArtalk)
+    else loadArtalk()
+  } else {
+    window.loadOtherComment = loadArtalk
+  }
+})()</script></div><script src="//at.alicdn.com/t/c/font_4343415_0wpj1ls292v.js"></script><div class="aplayer no-destroy" data-id="9104363479" data-server="netease" data-type="playlist" data-fixed="true" data-autoplay="false" data-mini="true" data-lrctype="0"> </div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/metingjs/dist/Meting.min.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["link[rel=\"canonical\"]","meta[property=\"og:image\"]","meta[property=\"og:title\"]","meta[property=\"og:url\"]","head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: true,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener
+  btf.removeGlobalFnEvent('pjax')
+  btf.removeGlobalFnEvent('themeChange')
+
+  document.getElementById('rightside').classList.remove('rightside-show')
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', 'G-YPHMHWSSG7', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', e => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
